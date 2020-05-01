@@ -1,0 +1,50 @@
+refer local jenkins  "tomcat freestyle_EC2 01052020"
+
+
+
+1.login to ec2
+ssh -i gmk_key_pair.pem ubuntu@13.233.246.243
+
+
+
+
+2.copy tomcat 8.5.35 to ec2
+
+  scp -i gmk_key_pair.pem /home/sunbeam/apache-tomcat-8.5.35.zip ubuntu@13.233.246.243:~/
+3.conf/tomcat-uesrs.xml
+ 
+	  <role rolename="manager-script"/>
+	  <role rolename="manager-gui"/>
+          <user username="manager" password="" roles="manager-gui,manager-script"/>
+	  <user username="deployer" password="deployer" roles="manager-script"/>
+
+4. change port no. in server.xml (8080 to 9090)
+ 
+
+cd /apache-tomcat-8.5.35/conf/ 
+
+vim server.xml 
+
+
+
+5.in context.xml in comment below code
+
+<!--
+ <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />
+-->
+
+cd /apache-tomcat-8.5.35/webapps/manager/META-INF/
+vim context.xml
+
+check tomcat
+http://13.233.246.243:9090
+
+
+
+6. access jenkins
+
+http://13.233.246.243:9090/jenkins/
+
+
+cd .jenkins
